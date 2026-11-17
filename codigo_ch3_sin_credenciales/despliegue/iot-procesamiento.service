@@ -1,0 +1,20 @@
+# Servicio systemd para el procesamiento local + IA del Gateway.
+# Instalar:
+#   sudo cp despliegue/iot-procesamiento.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now iot-procesamiento
+#   journalctl -u iot-procesamiento -f
+[Unit]
+Description=IoT Challenge 3 - procesamiento local y modulo de IA
+After=network-online.target mosquitto.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=iot
+WorkingDirectory=/home/iot/iot/gateway
+ExecStart=/home/iot/iot/venv/bin/python servicio_gateway.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

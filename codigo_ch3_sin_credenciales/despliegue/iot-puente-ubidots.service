@@ -1,0 +1,20 @@
+# Servicio systemd para el puente Gateway -> Ubidots (MQTT).
+# Instalar:
+#   sudo cp despliegue/iot-puente-ubidots.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now iot-puente-ubidots
+#   journalctl -u iot-puente-ubidots -f
+[Unit]
+Description=IoT Challenge 3 - puente Gateway a Ubidots (MQTT)
+After=network-online.target mosquitto.service iot-procesamiento.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=iot
+WorkingDirectory=/home/iot/iot/gateway
+ExecStart=/home/iot/iot/venv/bin/python puente_ubidots.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
